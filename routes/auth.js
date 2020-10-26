@@ -6,15 +6,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const requireLogin = require('../middleware/requireLogin');
-
 const User = mongoose.model('User');
 
 const router = express.Router();
-
-router.get('/protected', requireLogin, (req, res) => {
-  res.send('hello user');
-});
 
 router.post('/sign-up', (req, res) => {
   const { name, email, password } = req.body;
@@ -37,12 +31,12 @@ router.post('/sign-up', (req, res) => {
             .then(() => {
               res.json({ msg: 'saved successfully' });
             })
-            .catch((err) => console.log(err));
+            .catch((err) => res.json({ err }));
         });
     })
 
     .catch((err) => {
-      console.log(err);
+      res.json({ err });
     });
 });
 
